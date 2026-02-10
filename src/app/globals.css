@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-brand-deep text-brand-light antialiased min-h-screen relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/assets/bg-pattern.png");
+  background-repeat: repeat;
+  background-size: 400px;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-moon {
+  @apply pointer-events-none absolute -right-20 -top-20 h-96 w-96 opacity-30 blur-[2px] lg:opacity-50 lg:blur-0;
+  background-image: url("/assets/moon-lantern.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.btn-gold {
+  border: 1px solid rgba(227, 193, 122, 0.65);
+  color: #E3C17A;
+  background: linear-gradient(180deg, rgba(227, 193, 122, 0.08), rgba(7, 27, 27, 0.65));
+  box-shadow: 0 0 20px rgba(227, 193, 122, 0.15);
+}
+
+.btn-gold:hover {
+  border-color: rgba(252, 211, 77, 0.8);
+  color: #FCD34D;
+}
+
+a {
+  @apply text-brand-teal;
+}
+
+:focus-visible {
+  outline: 2px solid #66C3B1;
+  outline-offset: 2px;
+}

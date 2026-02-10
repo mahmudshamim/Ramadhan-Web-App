@@ -1,0 +1,32 @@
+{
+  "seheri": {
+    "title": {
+      "en": "Sehri Dua",
+      "bn": "সেহরির দোয়া"
+    },
+    "arabic": "وَبِصَوْمِ غَدٍ نَّوَيْتُ مِنْ شَهْرِ رَمَضَانَ",
+    "transliteration": {
+      "en": "Wa bisawmi ghadin nawaiytu min shahri Ramadan",
+      "bn": "ওয়া বিসাওমি গাদিন নাওয়াইতু মিন শাহরি রামাদান"
+    },
+    "translation": {
+      "en": "I intend to keep the fast for tomorrow in the month of Ramadan.",
+      "bn": "আমি পবিত্র রমজান মাসের আগামীকালের রোজা রাখার নিয়ত করছি।"
+    }
+  },
+  "iftar": {
+    "title": {
+      "en": "Iftar Dua",
+      "bn": "ইফতারের দোয়া"
+    },
+    "arabic": "اللَّهُمَّ إِنِّي لَكَ صُمْতُ وَعَلَى رِزْقِكَ أَفْطَرْتُ",
+    "transliteration": {
+      "en": "Allahumma inni laka sumtu wa ‘ala rizqika aftartu",
+      "bn": "আল্লাহুম্মা ইন্নি লাকা সুমতু ওয়া ‘আলা রিজকিকা আফতারতু"
+    },
+    "translation": {
+      "en": "O Allah! I fasted for You, and I break my fast with Your sustenance.",
+      "bn": "হে আল্লাহ! আমি আপনার জন্য রোজা রেখেছি এবং আপনার রিজিক দিয়ে ইফতার করছি।"
+    }
+  }
+}
