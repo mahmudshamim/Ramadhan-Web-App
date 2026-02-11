@@ -58,16 +58,25 @@ export default function DashboardPage() {
       .then(setHadith)
       .catch(() => setHadith(null));
 
+
     // Fetch Hijri date
-    fetch(`https://api.aladhan.com/v1/gToH/${getTodayKey()}`)
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    const dateFormatted = `${dd}-${mm}-${yyyy}`;
+
+    fetch(`https://api.aladhan.com/v1/gToH/${dateFormatted}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.code === 200 && data.data?.hijri) {
           const h = data.data.hijri;
           setHijriDate(`${h.day} ${h.month.en} ${h.year}`);
+        } else {
+          setHijriDate("--");
         }
       })
-      .catch(() => setHijriDate(""));
+      .catch(() => setHijriDate("--"));
   }, []);
 
   const togglePrayer = (prayer: PrayerName) => {
@@ -166,8 +175,8 @@ export default function DashboardPage() {
                   key={prayer.name}
                   onClick={() => togglePrayer(prayer.name)}
                   className={`flex items-center justify-between rounded-xl border p-4 transition-all ${today?.prayers[prayer.name]
-                      ? "border-emerald-500/50 bg-emerald-500/10"
-                      : "border-white/10 bg-white/5 hover:border-white/20"
+                    ? "border-emerald-500/50 bg-emerald-500/10"
+                    : "border-white/10 bg-white/5 hover:border-white/20"
                     }`}
                 >
                   <div className="flex items-center gap-3">
@@ -197,8 +206,8 @@ export default function DashboardPage() {
               <button
                 onClick={() => toggleActivity("roza")}
                 className={`flex items-center gap-3 rounded-xl border p-4 transition-all ${today?.roza
-                    ? "border-emerald-500/50 bg-emerald-500/10"
-                    : "border-white/10 bg-white/5 hover:border-white/20"
+                  ? "border-emerald-500/50 bg-emerald-500/10"
+                  : "border-white/10 bg-white/5 hover:border-white/20"
                   }`}
               >
                 {today?.roza ? (
@@ -211,8 +220,8 @@ export default function DashboardPage() {
               <button
                 onClick={() => toggleActivity("quran")}
                 className={`flex items-center gap-3 rounded-xl border p-4 transition-all ${today?.quran
-                    ? "border-emerald-500/50 bg-emerald-500/10"
-                    : "border-white/10 bg-white/5 hover:border-white/20"
+                  ? "border-emerald-500/50 bg-emerald-500/10"
+                  : "border-white/10 bg-white/5 hover:border-white/20"
                   }`}
               >
                 {today?.quran ? (
@@ -225,8 +234,8 @@ export default function DashboardPage() {
               <button
                 onClick={() => toggleActivity("dua")}
                 className={`flex items-center gap-3 rounded-xl border p-4 transition-all ${today?.dua
-                    ? "border-emerald-500/50 bg-emerald-500/10"
-                    : "border-white/10 bg-white/5 hover:border-white/20"
+                  ? "border-emerald-500/50 bg-emerald-500/10"
+                  : "border-white/10 bg-white/5 hover:border-white/20"
                   }`}
               >
                 {today?.dua ? (
