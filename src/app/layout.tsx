@@ -18,7 +18,11 @@ const sans = Space_Grotesk({
 export const metadata: Metadata = {
   title: "R-Ramadhan",
   description: "Your personal Ramadan companion",
-  manifest: "/manifest.json"
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/icon.png",
+  }
 };
 
 export const viewport = {
