@@ -1,0 +1,102 @@
+[
+    {
+        "id": 1,
+        "question": "What is the first month of the Islamic Calendar?",
+        "question_bn": "ইসলামিক ক্যালেন্ডারের প্রথম মাস কোনটি?",
+        "options": [
+            "Ramadan",
+            "Muharram",
+            "Shawwal",
+            "Rabi al-Awwal"
+        ],
+        "options_bn": [
+            "রমজান",
+            "মুহাররম",
+            "শাওয়াল",
+            "রবিউল আউয়াল"
+        ],
+        "correctIndex": 1,
+        "explanation": "Muharram is the first month of the Islamic (Hijri) calendar.",
+        "explanation_bn": "মুহাররম হলো হিজরি ক্যালেন্ডারের প্রথম মাস।"
+    },
+    {
+        "id": 2,
+        "question": "Which Prophet was given the title 'Khalilullah' (Friend of Allah)?",
+        "question_bn": "কোন নবীকে 'খলিলুল্লাহ' (আল্লাহর বন্ধু) উপাধি দেওয়া হয়েছে?",
+        "options": [
+            "Prophet Musa (AS)",
+            "Prophet Isa (AS)",
+            "Prophet Ibrahim (AS)",
+            "Prophet Muhammad (PBUH)"
+        ],
+        "options_bn": [
+            "নবী মূসা (আ.)",
+            "নবী ঈসা (আ.)",
+            "নবী ইব্রাহিম (আ.)",
+            "নবী মুহাম্মদ (সা.)"
+        ],
+        "correctIndex": 2,
+        "explanation": "Prophet Ibrahim (AS) is known as Khalilullah.",
+        "explanation_bn": "নবী ইব্রাহিম (আ.) কে খলিলুল্লাহ বলা হয়।"
+    },
+    {
+        "id": 3,
+        "question": "How many gates does Jannah (Paradise) have?",
+        "question_bn": "জান্নাতের দরজা কয়টি?",
+        "options": [
+            "5",
+            "7",
+            "8",
+            "6"
+        ],
+        "options_bn": [
+            "৫",
+            "৭",
+            "৮",
+            "৬"
+        ],
+        "correctIndex": 2,
+        "explanation": "Jannah has 8 gates.",
+        "explanation_bn": "জান্নাতের ৮টি দরজা রয়েছে।"
+    },
+    {
+        "id": 4,
+        "question": "Which Surah is known as the 'Heart of the Quran'?",
+        "question_bn": "কোন সূরাকে কুরআনের হৃদয় বলা হয়?",
+        "options": [
+            "Surah Al-Fatiha",
+            "Surah Yasin",
+            "Surah Ar-Rahman",
+            "Surah Al-Baqarah"
+        ],
+        "options_bn": [
+            "সূরা ফাতিহা",
+            "সূরা ইয়াসিন",
+            "সূরা আর-রহমান",
+            "সূরা বাকারা"
+        ],
+        "correctIndex": 1,
+        "explanation": "Surah Yasin is often referred to as the Heart of the Quran.",
+        "explanation_bn": "সূরা ইয়াসিনকে কুরআনের হৃদয় বলা হয়।"
+    },
+    {
+        "id": 5,
+        "question": "In which year did the Hijrah (Migration) take place?",
+        "question_bn": "হিজরত কোন সালে হয়েছিল?",
+        "options": [
+            "610 CE",
+            "622 CE",
+            "632 CE",
+            "600 CE"
+        ],
+        "options_bn": [
+            "৬১০ খ্রিস্টাব্দ",
+            "৬২২ খ্রিস্টাব্দ",
+            "৬৩২ খ্রিস্টাব্দ",
+            "৬০০ খ্রিস্টাব্দ"
+        ],
+        "correctIndex": 1,
+        "explanation": "The Hijrah took place in 622 CE.",
+        "explanation_bn": "হিজরত ৬২২ খ্রিস্টাব্দে হয়েছিল।"
+    }
+]

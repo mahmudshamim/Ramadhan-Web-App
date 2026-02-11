@@ -1,0 +1,142 @@
+[
+    {
+        "id": 1,
+        "arabic": "الله",
+        "transliteration": "Allah",
+        "en_meaning": "The Greatest Name",
+        "bn_meaning": "আল্লাহ (সর্বশ্রেষ্ঠ নাম)"
+    },
+    {
+        "id": 2,
+        "arabic": "الرَّحْمَن",
+        "transliteration": "Ar-Rahman",
+        "en_meaning": "The All-Compassionate",
+        "bn_meaning": "পরম দয়ালু"
+    },
+    {
+        "id": 3,
+        "arabic": "الرَّحِيم",
+        "transliteration": "Ar-Rahim",
+        "en_meaning": "The All-Merciful",
+        "bn_meaning": "অতি মেহেরবান"
+    },
+    {
+        "id": 4,
+        "arabic": "الْمَلِك",
+        "transliteration": "Al-Malik",
+        "en_meaning": "The Absolute Ruler",
+        "bn_meaning": "মহাবাসদশাহ"
+    },
+    {
+        "id": 5,
+        "arabic": "الْقُدُّوس",
+        "transliteration": "Al-Quddus",
+        "en_meaning": "The Pure One",
+        "bn_meaning": "মহামপবিত্র"
+    },
+    {
+        "id": 6,
+        "arabic": "السَّلاَم",
+        "transliteration": "As-Salam",
+        "en_meaning": "The Source of Peace",
+        "bn_meaning": "শান্তি বিধায়ক"
+    },
+    {
+        "id": 7,
+        "arabic": "الْمُؤْمِن",
+        "transliteration": "Al-Mu'min",
+        "en_meaning": "The Inspirer of Faith",
+        "bn_meaning": "নিরাপত্তা দাতা"
+    },
+    {
+        "id": 8,
+        "arabic": "الْمُهَيْمِن",
+        "transliteration": "Al-Muhaymin",
+        "en_meaning": "The Guardian",
+        "bn_meaning": "রক্ষনাবেক্ষনকারী"
+    },
+    {
+        "id": 9,
+        "arabic": "الْعَزِيز",
+        "transliteration": "Al-Aziz",
+        "en_meaning": "The Victorious",
+        "bn_meaning": "মপরাক্রমশালী"
+    },
+    {
+        "id": 10,
+        "arabic": "الْجَبَّار",
+        "transliteration": "Al-Jabbar",
+        "en_meaning": "The Compeller",
+        "bn_meaning": "মহাপ্রতাপশালী"
+    },
+    {
+        "id": 11,
+        "arabic": "الْمُتَكَبِّر",
+        "transliteration": "Al-Mutakabbir",
+        "en_meaning": "The Greatest",
+        "bn_meaning": "অহংকারের ন্যায়সংগত অধিকারি"
+    },
+    {
+        "id": 12,
+        "arabic": "الْخَالِق",
+        "transliteration": "Al-Khaliq",
+        "en_meaning": "The Creator",
+        "bn_meaning": "সৃষ্টিকর্তা"
+    },
+    {
+        "id": 13,
+        "arabic": "الْبَارِئ",
+        "transliteration": "Al-Bari",
+        "en_meaning": "The Maker of Order",
+        "bn_meaning": "সঠিকভাবে সৃষ্টিকারী"
+    },
+    {
+        "id": 14,
+        "arabic": "الْمُصَوِّر",
+        "transliteration": "Al-Musawwir",
+        "en_meaning": "The Shaper of Beauty",
+        "bn_meaning": "রূপদানকারী"
+    },
+    {
+        "id": 15,
+        "arabic": "الْغَفَّار",
+        "transliteration": "Al-Ghaffar",
+        "en_meaning": "The Forgiving",
+        "bn_meaning": "পরম ক্ষমাশীল"
+    },
+    {
+        "id": 16,
+        "arabic": "الْقَهَّار",
+        "transliteration": "Al-Qahhar",
+        "en_meaning": "The Subduer",
+        "bn_meaning": "কঠোর"
+    },
+    {
+        "id": 17,
+        "arabic": "الْوَهَّاب",
+        "transliteration": "Al-Wahhab",
+        "en_meaning": "The Giver of All",
+        "bn_meaning": "সবকিছু দানকারী"
+    },
+    {
+        "id": 18,
+        "arabic": "الرَّزَّاق",
+        "transliteration": "Ar-Razzaq",
+        "en_meaning": "The Sustainer",
+        "bn_meaning": "রিজিকদাতা"
+    },
+    {
+        "id": 19,
+        "arabic": "الْفَتَّاح",
+        "transliteration": "Al-Fattah",
+        "en_meaning": "The Opener",
+        "bn_meaning": "বিজয়দানকারী"
+    },
+    {
+        "id": 20,
+        "arabic": "الْعَلِيم",
+        "transliteration": "Al-Alim",
+        "en_meaning": "The All-Knowing",
+        "bn_meaning": "সর্বজ্ঞ"
+    }
+]
