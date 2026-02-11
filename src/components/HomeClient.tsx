@@ -403,8 +403,30 @@ export default function HomeClient() {
               </div>
             )}
           </div>
+
+          {/* Daily Quote */}
           <div className="h-[160px]">
-            <Badge title={t("home.badgeTitle")} subtitle={t("home.badgeSub")} />
+            <div className="h-full rounded-2xl border border-brand-gold/20 bg-gradient-to-br from-brand-deep/90 to-brand-deep/70 p-6 shadow-lg backdrop-blur relative overflow-hidden">
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-20 h-20 bg-brand-gold/5 rounded-full -translate-y-10 translate-x-10" />
+              <div className="absolute bottom-0 left-0 w-16 h-16 bg-brand-gold/5 rounded-full translate-y-8 -translate-x-8" />
+
+              <div className="relative z-10 h-full flex flex-col justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-brand-gold/70 mb-3">
+                    {lang === "bn" ? "আজকের বাণী" : "Daily Quote"}
+                  </p>
+                  <p className="text-sm leading-relaxed text-slate-200 italic">
+                    {lang === "bn"
+                      ? "\"নিশ্চয়ই আল্লাহর স্মরণে অন্তর প্রশান্ত হয়।\""
+                      : "\"Verily, in the remembrance of Allah do hearts find rest.\""}
+                  </p>
+                </div>
+                <p className="text-xs text-brand-sand/60">
+                  {lang === "bn" ? "— সূরা আর-রাদ ১৩:২৮" : "— Surah Ar-Ra'd 13:28"}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -576,6 +598,6 @@ export default function HomeClient() {
             : "permission.later"
         )}
       />
-    </section>
+    </section >
   );
 }
