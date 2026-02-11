@@ -461,7 +461,7 @@ export default function HomeClient() {
                         return (
                           <div
                             key={day.gregorianDate}
-                            className={`group relative flex flex-col md:flex-row md:items-center justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-500 ${today
+                            className={`group relative flex flex-col lg:flex-row lg:items-center justify-between overflow-hidden rounded-2xl border p-6 md:p-8 transition-all duration-500 ${today
                               ? "border-brand-gold bg-brand-gold/15 shadow-[0_0_40px_rgba(196,160,82,0.2)] ring-2 ring-brand-gold/50 z-10 scale-[1.02]"
                               : "border-brand-gold/10 bg-brand-deep/40 hover:border-brand-gold/30 hover:bg-brand-deep/60"
                               }`}
@@ -471,20 +471,24 @@ export default function HomeClient() {
                               <div className="absolute inset-0 bg-gradient-to-r from-brand-gold/10 via-transparent to-brand-gold/10 pointer-events-none animate-pulse-slow" />
                             )}
                             {/* Day and Date Section (Timeline Node) */}
-                            <div className="flex items-center gap-6 md:min-w-[280px]">
-                              <div className="relative flex items-center justify-center min-w-[80px]">
-                                {/* Timeline Line Accent */}
-                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-gradient-to-b from-brand-gold/0 via-brand-gold/60 to-brand-gold/0 rounded-full" />
+                            <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 lg:min-w-[280px]">
+                              <div className="relative flex items-center justify-center min-w-[80px] sm:min-w-[100px]">
+                                {/* Timeline Line Accent - Hidden on mobile */}
+                                <div className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-gradient-to-b from-brand-gold/0 via-brand-gold/60 to-brand-gold/0 rounded-full" />
 
-                                <div className="flex flex-col items-center ml-4">
-                                  <span className="text-[10px] uppercase tracking-[0.3em] text-brand-sand/50 font-bold mb-1">{t("ramadan.col.day")}</span>
-                                  <span className="font-display text-5xl leading-none text-brand-sand drop-shadow-[0_0_10px_rgba(196,160,82,0.3)]">
+                                <div className="flex flex-col items-center sm:ml-4">
+                                  <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-brand-sand/50 font-bold mb-1">{t("ramadan.col.day")}</span>
+                                  <span className="font-display text-5xl sm:text-6xl leading-none text-brand-sand drop-shadow-[0_0_10px_rgba(196,160,82,0.3)]">
                                     {lang === "bn" ? toBanglaDigits(day.hijriDay) : day.hijriDay}
                                   </span>
                                 </div>
                               </div>
-                              <div className="flex flex-col gap-1 border-l border-brand-gold/10 pl-6 h-12 justify-center">
-                                <span className="text-xl font-bold text-slate-100 leading-none">
+
+                              {/* Divider on mobile */}
+                              <div className="h-px w-16 bg-brand-gold/20 sm:hidden" />
+
+                              <div className="flex flex-col gap-1 sm:border-l border-brand-gold/10 sm:pl-6 sm:h-12 justify-center items-center sm:items-start text-center sm:text-left">
+                                <span className="text-xl sm:text-2xl font-bold text-slate-100 leading-none">
                                   {lang === "bn" ? toBanglaDigits(day.gregorianDate) : day.gregorianDate}
                                 </span>
                                 <span className="text-xs uppercase tracking-[0.2em] text-slate-400 font-medium">
@@ -494,25 +498,25 @@ export default function HomeClient() {
                             </div>
 
                             {/* Prayer Times Section */}
-                            <div className="mt-6 md:mt-0 flex flex-1 items-center justify-around md:justify-end md:gap-16 lg:gap-24 px-4 md:px-10 border-t md:border-t-0 md:border-l border-brand-gold/10 pt-6 md:pt-0">
-                              <div className="flex flex-col items-center md:items-end gap-1">
-                                <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-brand-sand/70 font-bold mb-1">
+                            <div className="mt-8 lg:mt-0 flex flex-row items-center justify-between sm:justify-around lg:justify-end gap-4 sm:gap-12 lg:gap-20 px-2 sm:px-6 lg:px-10 border-t lg:border-t-0 lg:border-l border-brand-gold/10 pt-6 lg:pt-0 w-full lg:w-auto">
+                              <div className="flex flex-col items-center lg:items-end gap-1">
+                                <div className="flex items-center gap-2 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-sand/70 font-bold mb-1">
                                   <FiSunrise className="text-brand-gold text-xs" />
                                   {t("ramadan.col.sehri")}
                                 </div>
-                                <span className="text-xl font-black text-white leading-none">
+                                <span className="text-xl sm:text-2xl font-black text-white leading-none">
                                   {formatTo12Hour(day.fajr, lang)}
                                 </span>
                               </div>
 
-                              <div className="h-10 w-px bg-brand-gold/10 hidden md:block" />
+                              <div className="h-10 w-px bg-brand-gold/10" />
 
-                              <div className="flex flex-col items-center md:items-start gap-1">
-                                <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-brand-sand/70 font-bold mb-1">
+                              <div className="flex flex-col items-center lg:items-start gap-1">
+                                <div className="flex items-center gap-2 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-sand/70 font-bold mb-1">
                                   <FiMoon className="text-brand-gold text-xs" />
                                   {t("ramadan.col.iftar")}
                                 </div>
-                                <span className="text-xl font-black text-white leading-none">
+                                <span className="text-xl sm:text-2xl font-black text-white leading-none">
                                   {formatTo12Hour(day.maghrib, lang)}
                                 </span>
                               </div>
@@ -527,7 +531,7 @@ export default function HomeClient() {
 
                             {today && (
                               <div className="absolute right-0 top-0 overflow-hidden">
-                                <div className="bg-brand-gold px-8 py-1.5 text-[9px] font-black uppercase text-brand-deep rotate-45 translate-x-6 translate-y-2 shadow-lg ring-1 ring-brand-deep/10">
+                                <div className="bg-brand-gold px-8 py-1.5 text-[9px] font-black uppercase text-brand-deep rotate-45 translate-x-8 sm:translate-x-6 translate-y-2 shadow-lg ring-1 ring-brand-deep/10">
                                   {t("ramadan.today")}
                                 </div>
                               </div>
