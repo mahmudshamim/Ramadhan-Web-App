@@ -141,7 +141,7 @@ export default function CalendarPage() {
                       return (
                         <div
                           key={day.gregorianDate}
-                          className={`group relative flex flex-col md:flex-row md:items-center justify-between overflow-hidden rounded-[2.5rem] border p-8 transition-all duration-500 ${today
+                          className={`group relative flex flex-col lg:flex-row lg:items-center justify-between overflow-hidden rounded-[2rem] border p-6 md:p-8 transition-all duration-500 ${today
                             ? "border-brand-gold bg-brand-gold/20 shadow-[0_0_60px_rgba(196,160,82,0.25)] ring-2 ring-brand-gold/60 z-10 scale-[1.02]"
                             : "border-brand-gold/10 bg-brand-deep/50 hover:border-brand-gold/30 hover:bg-brand-deep/80 shadow-2xl"
                             }`}
@@ -151,25 +151,29 @@ export default function CalendarPage() {
                             <div className="absolute inset-0 bg-gradient-to-r from-brand-gold/15 via-transparent to-brand-gold/15 pointer-events-none animate-pulse-slow" />
                           )}
                           {/* Day and Date Section (Timeline Node) */}
-                          <div className="flex items-center gap-10 md:min-w-[400px]">
-                            <div className="relative flex items-center justify-center min-w-[120px]">
-                              {/* Timeline Line Accent */}
-                              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-20 bg-gradient-to-b from-brand-gold/0 via-brand-gold/60 to-brand-gold/0 rounded-full" />
+                          <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 lg:min-w-[350px]">
+                            <div className="relative flex items-center justify-center min-w-[100px] sm:min-w-[120px]">
+                              {/* Timeline Line Accent - Hidden on mobile, visible on sm+ */}
+                              <div className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-20 bg-gradient-to-b from-brand-gold/0 via-brand-gold/60 to-brand-gold/0 rounded-full" />
 
-                              <div className="flex flex-col items-center ml-6">
-                                <span className="text-[11px] uppercase tracking-[0.4em] text-brand-sand/60 font-black mb-1">{t("ramadan.col.day")}</span>
-                                <span className="font-display text-7xl leading-none text-brand-sand drop-shadow-[0_0_15px_rgba(196,160,82,0.4)]">
+                              <div className="flex flex-col items-center sm:ml-6">
+                                <span className="text-[10px] uppercase tracking-[0.4em] text-brand-sand/60 font-black mb-1">{t("ramadan.col.day")}</span>
+                                <span className="font-display text-6xl sm:text-7xl leading-none text-brand-sand drop-shadow-[0_0_15px_rgba(196,160,82,0.4)]">
                                   {lang === "bn" ? toBanglaDigits(day.hijriDay) : day.hijriDay}
                                 </span>
                               </div>
                             </div>
-                            <div className="flex flex-col gap-2 border-l-2 border-brand-gold/10 pl-10 h-20 justify-center">
-                              <span className="text-3xl font-black text-slate-100 leading-none">
+
+                            {/* Divider on mobile */}
+                            <div className="h-px w-20 bg-brand-gold/20 sm:hidden" />
+
+                            <div className="flex flex-col gap-1 sm:gap-2 sm:border-l-2 border-brand-gold/10 sm:pl-10 sm:h-20 justify-center items-center sm:items-start text-center sm:text-left">
+                              <span className="text-2xl sm:text-3xl font-black text-slate-100 leading-none">
                                 {lang === "bn" ? toBanglaDigits(day.gregorianDate) : day.gregorianDate}
                               </span>
-                              <div className="flex items-center gap-4">
-                                <span className="h-1.5 w-10 bg-brand-gold/40 rounded-full" />
-                                <span className="text-sm uppercase tracking-[0.3em] text-slate-400 font-bold">
+                              <div className="flex items-center gap-3 sm:gap-4 mt-1 sm:mt-0">
+                                <span className="h-1 sm:h-1.5 w-8 sm:w-10 bg-brand-gold/40 rounded-full" />
+                                <span className="text-xs sm:text-sm uppercase tracking-[0.3em] text-slate-400 font-bold">
                                   {translateWeekday(day.weekday, lang)}
                                 </span>
                               </div>
@@ -177,25 +181,25 @@ export default function CalendarPage() {
                           </div>
 
                           {/* Prayer Times Section */}
-                          <div className="mt-10 md:mt-0 flex flex-1 items-center justify-around md:justify-end md:gap-20 lg:gap-32 px-6 md:px-16 border-t md:border-t-0 md:border-l border-brand-gold/10 pt-10 md:pt-0">
-                            <div className="flex flex-col items-center md:items-end gap-2">
-                              <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-brand-sand/80 font-black mb-1">
-                                <FiSunrise className="text-brand-gold text-base" />
+                          <div className="mt-8 lg:mt-0 flex flex-row items-center justify-between sm:justify-around lg:justify-end gap-4 sm:gap-12 lg:gap-24 px-2 sm:px-6 lg:px-16 border-t lg:border-t-0 lg:border-l border-brand-gold/10 pt-6 lg:pt-0 w-full lg:w-auto">
+                            <div className="flex flex-col items-center lg:items-end gap-1 sm:gap-2">
+                              <div className="flex items-center gap-2 text-[9px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-sand/80 font-black mb-1">
+                                <FiSunrise className="text-brand-gold text-sm sm:text-base" />
                                 {t("ramadan.col.sehri")}
                               </div>
-                              <span className="text-3xl font-black text-white leading-none">
+                              <span className="text-2xl sm:text-3xl font-black text-white leading-none">
                                 {formatTo12Hour(day.fajr, lang)}
                               </span>
                             </div>
 
-                            <div className="h-16 w-px bg-brand-gold/20 hidden md:block" />
+                            <div className="h-10 sm:h-16 w-px bg-brand-gold/20" />
 
-                            <div className="flex flex-col items-center md:items-start gap-2">
-                              <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-brand-sand/80 font-black mb-1">
-                                <FiMoon className="text-brand-gold text-base" />
+                            <div className="flex flex-col items-center lg:items-start gap-1 sm:gap-2">
+                              <div className="flex items-center gap-2 text-[9px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-sand/80 font-black mb-1">
+                                <FiMoon className="text-brand-gold text-sm sm:text-base" />
                                 {t("ramadan.col.iftar")}
                               </div>
-                              <span className="text-3xl font-black text-white leading-none">
+                              <span className="text-2xl sm:text-3xl font-black text-white leading-none">
                                 {formatTo12Hour(day.maghrib, lang)}
                               </span>
                             </div>
@@ -208,7 +212,7 @@ export default function CalendarPage() {
 
                           {today && (
                             <div className="absolute right-0 top-0 overflow-hidden">
-                              <div className="bg-brand-gold px-12 py-2.5 text-[11px] font-black uppercase text-brand-deep rotate-45 translate-x-10 translate-y-4 shadow-2xl ring-2 ring-brand-deep/10">
+                              <div className="bg-brand-gold px-12 py-2.5 text-[10px] sm:text-[11px] font-black uppercase text-brand-deep rotate-45 translate-x-12 sm:translate-x-10 translate-y-3 sm:translate-y-4 shadow-2xl ring-2 ring-brand-deep/10">
                                 {t("ramadan.today")}
                               </div>
                             </div>
