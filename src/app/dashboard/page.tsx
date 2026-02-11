@@ -71,7 +71,8 @@ export default function DashboardPage() {
       .then((data) => {
         if (data.code === 200 && data.data?.hijri) {
           const h = data.data.hijri;
-          setHijriDate(`${h.day} ${h.month.en} ${h.year}`);
+          // Use Arabic month name for better display
+          setHijriDate(`${h.day} ${h.month.ar} ${h.year}`);
         } else {
           setHijriDate("--");
         }
