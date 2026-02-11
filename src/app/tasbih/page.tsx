@@ -45,6 +45,9 @@ export default function TasbihPage() {
         }
     };
 
+    // Calculate cycle count (1-33)
+    const cycleCount = count % 33 === 0 && count > 0 ? 33 : count % 33;
+
     return (
         <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-8 px-6 py-12">
             <header className="text-center">
@@ -63,14 +66,25 @@ export default function TasbihPage() {
             >
                 <div className="absolute inset-0 rounded-full border border-white/5 bg-[url('/patterns/noise.png')] opacity-20"></div>
 
+                {/* Cycle Count (1-33) */}
                 <span className="text-8xl font-bold text-white tabular-nums tracking-tighter drop-shadow-2xl">
-                    {count}
+                    {cycleCount}
                 </span>
                 <span className="mt-2 text-sm font-medium text-emerald-400/60 uppercase tracking-widest">
                     {lang === 'bn' ? 'গণনা' : 'Count'}
                 </span>
 
-                {/* Circular Progress (Visual only for now) */}
+                {/* Total Count */}
+                <div className="mt-4 flex flex-col items-center">
+                    <span className="text-xs text-slate-500 uppercase tracking-wider mb-1">
+                        {lang === 'bn' ? 'মোট' : 'Total'}
+                    </span>
+                    <span className="text-2xl font-bold text-emerald-400/80 tabular-nums">
+                        {count}
+                    </span>
+                </div>
+
+                {/* Circular Progress */}
                 <svg className="absolute inset-0 h-full w-full -rotate-90 p-2" viewBox="0 0 100 100">
                     <circle
                         cx="50"
@@ -89,7 +103,7 @@ export default function TasbihPage() {
                         stroke="currentColor"
                         strokeWidth="2"
                         strokeDasharray={289}
-                        strokeDashoffset={289 - (289 * (count % 33)) / 33}
+                        strokeDashoffset={289 - (289 * cycleCount) / 33}
                         className="text-emerald-500 transition-all duration-300"
                         strokeLinecap="round"
                     />
