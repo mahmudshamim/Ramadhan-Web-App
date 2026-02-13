@@ -5,6 +5,8 @@ import NavBar from "../components/NavBar";
 import ServiceWorker from "../components/ServiceWorker";
 import { I18nProvider } from "../lib/i18n";
 
+import Script from "next/script";
+
 const display = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-display"
@@ -16,12 +18,47 @@ const sans = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "R-Ramadhan",
-  description: "Your personal Ramadan companion",
+  metadataBase: new URL("https://r-ramadhan.vercel.app"),
+  title: {
+    default: "R-Ramadhan - Your Personal Ramadan Companion",
+    template: "%s | R-Ramadhan"
+  },
+  description: "Experience a more organized and spiritual Ramadan with R-Ramadhan. Tracker, Quran, Hadith, Quiz, and health features all in one place.",
   manifest: "/manifest.json",
+  keywords: ["Ramadan", "Islamic App", "Ramadan Calendar", "Quran", "Hadith", "Ramadan Tracker", "Zakat Calculator"],
+  authors: [{ name: "R-Ramadhan Team" }],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "R-Ramadhan",
+    description: "Your personal Ramadan companion for a spiritual journey.",
+    url: "https://r-ramadhan.vercel.app",
+    siteName: "R-Ramadhan",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "R-Ramadhan",
+    description: "Your personal Ramadan companion",
+  },
   icons: {
     icon: "/favicon.ico",
     apple: "/icon.png",
+  }
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "R-Ramadhan",
+  "url": "https://r-ramadhan.vercel.app",
+  "description": "Your personal Ramadan companion for a spiritual journey.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://r-ramadhan.vercel.app/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
   }
 };
 
@@ -36,6 +73,29 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <Script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
+      </head>
       <body className="min-h-screen font-sans">
         <I18nProvider>
           <div className="ramadan-shell ramadan-pattern min-h-screen">
