@@ -32,12 +32,15 @@ export async function fetchHijriCalendar(params: {
 
   const adjustment = params.adjustment ?? 0;
 
-  return (data?.data ?? []).map((day: any) => ({
+  const allDays = (data?.data ?? []).map((day: any) => ({
     gregorianDate: day?.date?.gregorian?.date ?? "",
     weekday: day?.date?.gregorian?.weekday?.en ?? "",
     hijriDay: Number(day?.date?.hijri?.day ?? 0) + adjustment,
     fajr: sanitizeTime(day?.timings?.Fajr ?? "05:00"),
     maghrib: sanitizeTime(day?.timings?.Maghrib ?? "18:00")
   })) as RamadanDay[];
+
+  // Filter out days with invalid hijriDay (e.g., 0 or negative after adjustment)
+  return allDays.filter((d) => d.hijriDay > 0);
 
 }
