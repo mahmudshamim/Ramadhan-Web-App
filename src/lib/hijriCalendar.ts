@@ -16,6 +16,7 @@ export async function fetchHijriCalendar(params: {
   hijriYear: number;
   hijriMonth: number;
   school: 0 | 1;
+  adjustment?: number;
 }) {
   const url = new URL(
     `https://api.aladhan.com/v1/hijriCalendar/${params.hijriYear}/${params.hijriMonth}`
@@ -29,11 +30,14 @@ export async function fetchHijriCalendar(params: {
   if (!response.ok) throw new Error("Failed to fetch Hijri calendar");
   const data = await response.json();
 
+  const adjustment = params.adjustment ?? 0;
+
   return (data?.data ?? []).map((day: any) => ({
     gregorianDate: day?.date?.gregorian?.date ?? "",
     weekday: day?.date?.gregorian?.weekday?.en ?? "",
-    hijriDay: Number(day?.date?.hijri?.day ?? 0),
+    hijriDay: Number(day?.date?.hijri?.day ?? 0) + adjustment,
     fajr: sanitizeTime(day?.timings?.Fajr ?? "05:00"),
     maghrib: sanitizeTime(day?.timings?.Maghrib ?? "18:00")
   })) as RamadanDay[];
+
 }

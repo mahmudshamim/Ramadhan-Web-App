@@ -44,7 +44,8 @@ export default function CalendarPage() {
         longitude,
         hijriYear,
         hijriMonth,
-        school: settings.school
+        school: settings.school,
+        adjustment: -1
       })
         .then((data) => {
           setCalendar(data);

@@ -210,7 +210,8 @@ export default function HomeClient() {
       longitude: activeCoords.lon,
       hijriYear: 1447,
       hijriMonth: 9,
-      school
+      school,
+      adjustment: -1
     })
       .then((data) => {
         setRamadanDays(data);
