@@ -47,8 +47,7 @@ const IMPORTANT_SURAH_NUMBERS = [
 ];
 
 function getAudioUrl(surahNumber: number): string {
-  const paddedNum = String(surahNumber).padStart(3, "0");
-  return `https://server.mp3quran.net/mishary/${paddedNum}.mp3`;
+  return `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${surahNumber}.mp3`;
 }
 
 export default function QuranPage() {
