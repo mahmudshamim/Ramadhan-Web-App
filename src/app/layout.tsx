@@ -66,6 +66,9 @@ export const viewport = {
   themeColor: "#0f172a",
 };
 
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 export default function RootLayout({
   children
 }: {
@@ -74,6 +77,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
       <head>
+        <meta name="google-site-verification" content="b-jJc-example-verification-code" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -104,6 +108,8 @@ export default function RootLayout({
             <div className="pattern min-h-screen">
               <div className="ornament-overlay min-h-screen">
                 {children}
+                <Analytics />
+                <SpeedInsights />
               </div>
             </div>
           </div>

@@ -99,8 +99,22 @@ export default function QuizPage() {
 
     const currentQuestion = questions[currentIndex];
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Quiz",
+        "name": "Islamic General Knowledge Quiz",
+        "description": "Test your knowledge of Islam, Quran, and Sunnah.",
+        "educationLevel": "Beginner",
+        "assesses": "Islamic Knowledge",
+        "url": "https://r-ramadhan.vercel.app/quiz"
+    };
+
     return (
         <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center px-6 py-12">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <div className="w-full rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-sm">
                 {showResult ? (
                     <div className="text-center space-y-6">
