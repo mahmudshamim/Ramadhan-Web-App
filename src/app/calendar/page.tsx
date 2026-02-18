@@ -212,8 +212,8 @@ export default function CalendarPage() {
                           )}
 
                           {today && (
-                            <div className="absolute right-0 top-0 overflow-hidden">
-                              <div className="bg-brand-gold px-12 py-2.5 text-[10px] sm:text-[11px] font-black uppercase text-brand-deep rotate-45 translate-x-12 sm:translate-x-10 translate-y-3 sm:translate-y-4 shadow-2xl ring-2 ring-brand-deep/10">
+                            <div className="absolute right-0 top-0 overflow-hidden w-24 h-24 pointer-events-none">
+                              <div className="absolute top-0 right-0 bg-brand-gold w-[120%] text-center py-1.5 text-[10px] sm:text-[11px] font-black uppercase text-brand-deep rotate-45 origin-bottom-left translate-x-[22px] translate-y-[-28px] shadow-2xl ring-2 ring-brand-deep/10">
                                 {t("ramadan.today")}
                               </div>
                             </div>
