@@ -223,6 +223,36 @@ export default function HomeClient() {
       });
   }, [coords, school]);
 
+  // Sync prayer times with Ramadan Calendar if available
+  useEffect(() => {
+    if (ramadanDays.length === 0) return;
+
+    const today = new Date();
+    const todayStr = `${String(today.getDate()).padStart(2, "0")}-${String(today.getMonth() + 1).padStart(2, "0")}-${today.getFullYear()}`;
+    const ramadanToday = ramadanDays.find((d) => d.gregorianDate === todayStr);
+
+    if (ramadanToday) {
+      setTodayTimes((prev) => ({
+        ...prev,
+        Fajr: ramadanToday.fajr,
+        Maghrib: ramadanToday.maghrib
+      }));
+    }
+
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowStr = `${String(tomorrow.getDate()).padStart(2, "0")}-${String(tomorrow.getMonth() + 1).padStart(2, "0")}-${tomorrow.getFullYear()}`;
+    const ramadanTomorrow = ramadanDays.find((d) => d.gregorianDate === tomorrowStr);
+
+    if (ramadanTomorrow) {
+      setTomorrowTimes((prev) => ({
+        ...prev,
+        Fajr: ramadanTomorrow.fajr,
+        Maghrib: ramadanTomorrow.maghrib
+      }));
+    }
+  }, [ramadanDays]);
+
   const { countdownTarget, countdownLabelKey } = useMemo(() => {
     const now = new Date();
     const today = new Date();
