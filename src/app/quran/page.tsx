@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import { loadJSON, saveJSON } from "../../lib/storage";
 import { useLang } from "../../lib/i18n";
 import { fetchRandomHadith, type HadithData } from "../../lib/hadith-api";
-import { FiPlay, FiPause, FiVolume2 } from "react-icons/fi";
+import { FiPlay, FiPause, FiStar } from "react-icons/fi";
 
 type Ayah = {
   surah: string;
@@ -23,6 +23,33 @@ type Surah = {
 };
 
 const BOOKMARK_KEY = "rramadhan_ayah_bookmarks";
+
+// Important surahs that should be featured
+const IMPORTANT_SURAH_NUMBERS = [
+  1,   // Al-Fatiha
+  2,   // Al-Baqara
+  3,   // Aal-Imran
+  18,  // Al-Kahf
+  32,  // As-Sajdah
+  36,  // Ya-Sin
+  44,  // Ad-Dukhan
+  55,  // Ar-Rahman
+  56,  // Al-Waqi'ah
+  67,  // Al-Mulk
+  73,  // Al-Muzzammil
+  78,  // An-Naba
+  87,  // Al-A'la
+  93,  // Ad-Duha
+  97,  // Al-Qadr
+  112, // Al-Ikhlas
+  113, // Al-Falaq
+  114, // An-Nas
+];
+
+function getAudioUrl(surahNumber: number): string {
+  const paddedNum = String(surahNumber).padStart(3, "0");
+  return `https://server.mp3quran.net/mishary/${paddedNum}.mp3`;
+}
 
 export default function QuranPage() {
   const { t, lang } = useLang();
@@ -56,14 +83,13 @@ export default function QuranPage() {
             name: s.englishName,
             arabicName: s.name,
             englishNameTranslation: s.englishNameTranslation,
-            verses: new Array(s.numberOfAyahs).fill(0).map((_, i) => ({ ayah: `${s.number}:${i + 1}`, text: "" })) // Verses not needed for list view, just count
+            verses: new Array(s.numberOfAyahs).fill(0).map((_, i) => ({ ayah: `${s.number}:${i + 1}`, text: "" }))
           }));
           setSurahs(formattedSurahs);
         }
       })
       .catch((err) => {
         console.error("Failed to fetch surahs", err);
-        // Fallback to sample if API fails
         fetch("/data/surah_sample.json").then((res) => res.json()).then(setSurahs).catch(() => setSurahs([]));
       });
 
@@ -100,8 +126,8 @@ export default function QuranPage() {
       if (audioRef.current) {
         audioRef.current.pause();
       }
-      // Using Mishary Rashid Alafasy audio
-      const audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${surahNumber}.mp3`;
+      // Full surah audio from mp3quran.net (Mishary Rashid Alafasy)
+      const audioUrl = getAudioUrl(surahNumber);
       const audio = new Audio(audioUrl);
       audioRef.current = audio;
 
@@ -119,6 +145,10 @@ export default function QuranPage() {
       };
     }
   };
+
+  // Split surahs into important and all
+  const importantSurahs = surahs.filter((s) => IMPORTANT_SURAH_NUMBERS.includes(s.number));
+  const allSurahs = surahs;
 
   return (
     <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-12 px-6 py-20 pb-32">
@@ -271,52 +301,133 @@ export default function QuranPage() {
         </section>
       </div>
 
+      {/* Important Surahs Section */}
+      {importantSurahs.length > 0 && (
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <FiStar className="h-5 w-5 text-brand-gold" />
+            <h3 className="text-xl font-semibold text-white">
+              {lang === "bn" ? "গুরুত্বপূর্ণ সূরা সমূহ" : "Important Surahs"}
+            </h3>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {importantSurahs.map((surah) => (
+              <div
+                key={`important-${surah.number}`}
+                className={`group relative overflow-hidden rounded-2xl border p-5 transition-all hover:-translate-y-1 hover:shadow-xl ${currentAudio === surah.number && isPlaying
+                  ? 'border-brand-gold/50 bg-brand-gold/10 shadow-brand-gold/10'
+                  : 'border-brand-gold/20 bg-gradient-to-br from-brand-gold/5 to-white/5 hover:border-brand-gold/40 hover:bg-brand-gold/10'
+                  }`}
+              >
+                {/* Surah number badge */}
+                <div className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-brand-gold/15 text-xs font-bold text-brand-gold">
+                  {surah.number}
+                </div>
+
+                <div className="flex items-center gap-4">
+                  {/* Play button */}
+                  <button
+                    onClick={() => toggleAudio(surah.number)}
+                    className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full transition-all ${currentAudio === surah.number && isPlaying
+                      ? "bg-brand-gold text-brand-deep shadow-lg shadow-brand-gold/30"
+                      : "bg-brand-gold/15 text-brand-gold hover:bg-brand-gold hover:text-brand-deep"
+                      }`}
+                  >
+                    {currentAudio === surah.number && isPlaying ? (
+                      <FiPause className="h-5 w-5" />
+                    ) : (
+                      <FiPlay className="h-5 w-5 ml-0.5" />
+                    )}
+                  </button>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-2">
+                      <h4 className="text-base font-semibold text-white truncate">{surah.name}</h4>
+                      <span className="font-amiri text-lg text-brand-gold/80 flex-shrink-0">{surah.arabicName}</span>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-0.5">{surah.englishNameTranslation}</p>
+                    <p className="text-[10px] text-slate-500 mt-0.5">{surah.verses.length} Ayahs</p>
+                  </div>
+                </div>
+
+                {/* Playing indicator */}
+                {currentAudio === surah.number && isPlaying && (
+                  <div className="mt-3 flex items-center gap-2">
+                    <div className="flex gap-0.5 items-end">
+                      <div className="w-1 h-3 bg-brand-gold rounded-full animate-pulse" style={{ animationDelay: "0ms" }} />
+                      <div className="w-1 h-4 bg-brand-gold rounded-full animate-pulse" style={{ animationDelay: "150ms" }} />
+                      <div className="w-1 h-2 bg-brand-gold rounded-full animate-pulse" style={{ animationDelay: "300ms" }} />
+                      <div className="w-1 h-5 bg-brand-gold rounded-full animate-pulse" style={{ animationDelay: "75ms" }} />
+                    </div>
+                    <span className="text-xs text-brand-gold/70">{lang === "bn" ? "প্লে হচ্ছে..." : "Playing..."}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* All Surahs */}
       <section>
-        <h3 className="mb-6 text-xl font-semibold text-white">{t("quran.surah")}</h3>
+        <h3 className="mb-6 text-xl font-semibold text-white">
+          {lang === "bn" ? "সকল সূরা (অফলাইন)" : "All Surahs"}
+        </h3>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {surahs.map((surah) => (
+          {allSurahs.map((surah) => (
             <div
-              key={surah.name}
-              className={`group relative cursor-pointer overflow-hidden rounded-2xl border bg-white/5 p-6 transition-all hover:-translate-y-1 hover:border-teal-500/30 hover:shadow-xl hover:shadow-teal-500/5 items-stretch ${currentAudio === surah.number && isPlaying
+              key={surah.number}
+              className={`group relative overflow-hidden rounded-2xl border bg-white/5 p-5 transition-all hover:-translate-y-1 hover:border-teal-500/30 hover:shadow-xl hover:shadow-teal-500/5 ${currentAudio === surah.number && isPlaying
                 ? 'border-emerald-500/50 bg-emerald-500/10'
                 : 'border-white/10 hover:bg-white/10'
                 }`}
             >
-              <div className="mb-4 flex items-center justify-between">
-                <div>
-                  <h4 className="text-lg font-medium text-teal-100 group-hover:text-white transition-colors">
-                    {surah.name}
-                  </h4>
-                  <p className="text-xs text-slate-400">{surah.englishNameTranslation}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right mr-2 hidden sm:block">
-                    <p className="font-amiri text-lg text-emerald-400">{surah.arabicName}</p>
+              {/* Surah number badge */}
+              <div className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-xs font-bold text-slate-500 group-hover:text-teal-400 group-hover:bg-teal-500/10">
+                {surah.number}
+              </div>
+
+              <div className="flex items-center gap-4">
+                {/* Play button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleAudio(surah.number);
+                  }}
+                  className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full transition-all ${currentAudio === surah.number && isPlaying
+                    ? "bg-white text-emerald-600 shadow-lg"
+                    : "bg-white/10 text-emerald-400 hover:bg-emerald-500 hover:text-white"
+                    }`}
+                >
+                  {currentAudio === surah.number && isPlaying ? (
+                    <FiPause className="h-4 w-4" />
+                  ) : (
+                    <FiPlay className="h-4 w-4 ml-0.5" />
+                  )}
+                </button>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2">
+                    <h4 className="text-sm font-medium text-teal-100 group-hover:text-white truncate">{surah.name}</h4>
+                    <span className="font-amiri text-base text-emerald-400/80 flex-shrink-0">{surah.arabicName}</span>
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleAudio(surah.number);
-                    }}
-                    className={`rounded-full p-2 transition-all ${currentAudio === surah.number && isPlaying
-                      ? "bg-white text-emerald-600 shadow-lg"
-                      : "bg-white/10 text-emerald-400 hover:bg-emerald-500 hover:text-white"
-                      }`}
-                  >
-                    {currentAudio === surah.number && isPlaying ? (
-                      <FiPause className="h-4 w-4" />
-                    ) : (
-                      <FiPlay className="h-4 w-4 ml-0.5" />
-                    )}
-                  </button>
-                  <div className="rounded-full bg-white/5 px-2 py-1 text-xs text-slate-400 transition-colors group-hover:bg-teal-500/10 group-hover:text-teal-400">
-                    {surah.verses.length} verses
-                  </div>
+                  <p className="text-xs text-slate-400 mt-0.5">{surah.englishNameTranslation}</p>
+                  <p className="text-[10px] text-slate-500">{surah.verses.length} Ayahs</p>
                 </div>
               </div>
-              <div className="text-xs text-slate-500 mt-2">
-                {surah.verses.length} Ayahs
-              </div>
+
+              {/* Playing indicator */}
+              {currentAudio === surah.number && isPlaying && (
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="flex gap-0.5 items-end">
+                    <div className="w-1 h-3 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: "0ms" }} />
+                    <div className="w-1 h-4 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: "150ms" }} />
+                    <div className="w-1 h-2 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: "300ms" }} />
+                    <div className="w-1 h-5 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: "75ms" }} />
+                  </div>
+                  <span className="text-xs text-emerald-400/70">{lang === "bn" ? "প্লে হচ্ছে..." : "Playing..."}</span>
+                </div>
+              )}
             </div>
           ))}
         </div>
