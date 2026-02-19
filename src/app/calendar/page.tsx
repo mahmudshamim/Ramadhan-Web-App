@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { loadJSON, saveJSON } from "../../lib/storage";
-import { loadSettings, saveSettings } from "../../lib/settings";
+import { defaultSettings, loadSettings, saveSettings } from "../../lib/settings";
 import { fetchHijriCalendar, type RamadanDay } from "../../lib/hijriCalendar";
 import { useLang } from "../../lib/i18n";
-import { formatTo12Hour } from "../../lib/prayerTime";
+import { formatTo12Hour, shiftTime } from "../../lib/prayerTime";
 import { toBanglaDigits, translateWeekday } from "../../lib/i18n-utils";
 import { FiSunrise, FiMoon } from "react-icons/fi";
 
@@ -26,6 +26,7 @@ export default function CalendarPage() {
   const { t, lang } = useLang();
   const [calendar, setCalendar] = useState<RamadanDay[]>([]);
   const [statusKey, setStatusKey] = useState("calendar.status.loading");
+  const [imsakOffset, setImsakOffset] = useState(defaultSettings.imsakOffsetMin);
 
   useEffect(() => {
     const cached = loadJSON<RamadanDay[]>(CACHE_KEY);
@@ -35,6 +36,7 @@ export default function CalendarPage() {
     }
 
     const settings = loadSettings();
+    setImsakOffset(settings.imsakOffsetMin ?? defaultSettings.imsakOffsetMin);
     const hijriYear = 1447;
     const hijriMonth = 9; // Ramadan
 
@@ -182,26 +184,37 @@ export default function CalendarPage() {
                           </div>
 
                           {/* Prayer Times Section */}
-                          <div className="mt-8 lg:mt-0 flex flex-row items-center justify-between sm:justify-around lg:justify-end gap-4 sm:gap-12 lg:gap-24 px-2 sm:px-6 lg:px-16 border-t lg:border-t-0 lg:border-l border-brand-gold/10 pt-6 lg:pt-0 w-full lg:w-auto">
-                            <div className="flex flex-col items-center lg:items-end gap-1 sm:gap-2">
-                              <div className="flex items-center gap-2 text-[9px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-sand/80 font-black mb-1">
-                                <FiSunrise className="text-brand-gold text-sm sm:text-base" />
-                                {t("ramadan.col.sehri")}
+                          <div className="mt-8 lg:mt-0 w-full border-t border-brand-gold/10 pt-6 lg:w-auto lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0">
+                            <div className="flex flex-row items-center justify-between sm:justify-around lg:justify-end gap-4 sm:gap-8 lg:gap-14 px-2 sm:px-6 lg:px-10">
+                              <div className="flex flex-col items-center lg:items-end gap-1 sm:gap-2">
+                                <div className="flex items-center gap-2 text-[9px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-sand/80 font-black mb-1">
+                                  <FiSunrise className="text-brand-gold text-sm sm:text-base" />
+                                  {t("ramadan.col.sehri")}
+                                </div>
+                                <span className="text-2xl sm:text-3xl font-black text-white leading-none">
+                                  {formatTo12Hour(shiftTime(day.fajr, -imsakOffset), lang)}
+                                </span>
                               </div>
-                              <span className="text-2xl sm:text-3xl font-black text-white leading-none">
-                                {formatTo12Hour(day.fajr, lang)}
-                              </span>
+
+                              <div className="h-10 sm:h-16 w-px bg-brand-gold/20" />
+
+                              <div className="flex flex-col items-center lg:items-start gap-1 sm:gap-2">
+                                <div className="flex items-center gap-2 text-[9px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-sand/80 font-black mb-1">
+                                  <FiMoon className="text-brand-gold text-sm sm:text-base" />
+                                  {t("ramadan.col.iftar")}
+                                </div>
+                                <span className="text-2xl sm:text-3xl font-black text-white leading-none">
+                                  {formatTo12Hour(day.maghrib, lang)}
+                                </span>
+                              </div>
                             </div>
-
-                            <div className="h-10 sm:h-16 w-px bg-brand-gold/20" />
-
-                            <div className="flex flex-col items-center lg:items-start gap-1 sm:gap-2">
-                              <div className="flex items-center gap-2 text-[9px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-sand/80 font-black mb-1">
-                                <FiMoon className="text-brand-gold text-sm sm:text-base" />
-                                {t("ramadan.col.iftar")}
-                              </div>
-                              <span className="text-2xl sm:text-3xl font-black text-white leading-none">
-                                {formatTo12Hour(day.maghrib, lang)}
+                            <div className="mt-4 flex items-center justify-center gap-2 rounded-full border border-brand-gold/20 bg-brand-gold/5 px-3 py-1.5 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-brand-sand/85">
+                              <span className="flex items-center gap-2 text-[9px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-sand/80 font-black">
+                                <FiSunrise className="text-brand-gold text-sm sm:text-base" />
+                                {t("prayer.fajrStart")}
+                              </span>
+                              <span className="font-bold text-white normal-case tracking-normal">
+                                {formatTo12Hour(day.fajr, lang)}
                               </span>
                             </div>
                           </div>

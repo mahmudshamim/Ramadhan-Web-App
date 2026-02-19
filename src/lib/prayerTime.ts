@@ -82,3 +82,16 @@ export function formatTo12Hour(time24: string, lang: Lang = "en"): string {
   const result = `${hour}:${minuteStr} ${ampm}`;
   return lang === "bn" ? toBanglaDigits(result) : result;
 }
+
+export function shiftTime(time24: string, offsetMinutes: number): string {
+  if (!time24) return time24;
+  const [hourStr, minuteStr] = time24.split(":");
+  const hour = Number(hourStr);
+  const minute = Number(minuteStr);
+  if (Number.isNaN(hour) || Number.isNaN(minute)) return time24;
+
+  const totalMinutes = ((hour * 60 + minute + offsetMinutes) % 1440 + 1440) % 1440;
+  const nextHour = Math.floor(totalMinutes / 60);
+  const nextMinute = totalMinutes % 60;
+  return `${String(nextHour).padStart(2, "0")}:${String(nextMinute).padStart(2, "0")}`;
+}

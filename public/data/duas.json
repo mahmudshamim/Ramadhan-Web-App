@@ -1,17 +1,17 @@
 {
   "seheri": {
     "title": {
-      "en": "Sehri Dua",
-      "bn": "সেহরির দোয়া"
+      "en": "Roza Niyyat",
+      "bn": "রোজার নিয়ত"
     },
-    "arabic": "وَبِصَوْمِ غَدٍ نَّوَيْتُ مِنْ شَهْرِ رَمَضَانَ",
+    "arabic": "نَوَيْتُ اَنْ اُصُوْمَ غَدًا مِّنْ شَهْرِ رَمْضَانَ الْمُبَارَكِ فَرْضًا لَكَ يَا اللهُ فَتَقَبَّلْ مِنِّى اِنَّكَ اَنْتَ السَّمِيْعُ الْعَلِيْمُ",
     "transliteration": {
-      "en": "Wa bisawmi ghadin nawaiytu min shahri Ramadan",
-      "bn": "ওয়া বিসাওমি গাদিন নাওয়াইতু মিন শাহরি রামাদান"
+      "en": "Nawaitu an asuma ghadam min shahri ramadanal mubarak, fardal laka ya Allahu fataqabbal minni innaka antas sami'ul alim.",
+      "bn": "নাওয়াইতু আন আসুমা গাদাম, মিন শাহরি রামাদানাল মুবারাক; ফারদাল লাকা ইয়া আল্লাহু, ফাতাকাব্বাল মিন্নি ইন্নাকা আন্তাস সামিউল আলিম।"
     },
     "translation": {
-      "en": "I intend to keep the fast for tomorrow in the month of Ramadan.",
-      "bn": "আমি পবিত্র রমজান মাসের আগামীকালের রোজা রাখার নিয়ত করছি।"
+      "en": "O Allah! I intend to keep tomorrow's obligatory fast of the blessed month of Ramadan for Your sake. So accept it from me. Surely You are the All-Hearing, All-Knowing.",
+      "bn": "হে আল্লাহ! আমি আগামীকাল পবিত্র রমজানের তোমার পক্ষ থেকে নির্ধারিত ফরজ রোজা রাখার নিয়ত করলাম। অতএব তুমি আমার পক্ষ থেকে তা কবুল কর। নিশ্চয়ই তুমি সর্বশ্রোতা, সর্বজ্ঞ।"
     }
   },
   "iftar": {
@@ -19,7 +19,7 @@
       "en": "Iftar Dua",
       "bn": "ইফতারের দোয়া"
     },
-    "arabic": "اللَّهُمَّ إِنِّي لَكَ صُمْতُ وَعَلَى رِزْقِكَ أَفْطَرْتُ",
+    "arabic": "اللهم إني لك صمت وعلى رزقك أفطرت",
     "transliteration": {
       "en": "Allahumma inni laka sumtu wa ‘ala rizqika aftartu",
       "bn": "আল্লাহুম্মা ইন্নি লাকা সুমতু ওয়া ‘আলা রিজকিকা আফতারতু"

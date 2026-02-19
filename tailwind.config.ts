@@ -19,7 +19,8 @@ export default {
       },
       fontFamily: {
         display: ["var(--font-display)", "serif"],
-        sans: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"]
+        sans: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
+        arabic: ["var(--font-arabic)", "serif"]
       },
       backgroundImage: {
         "moon-gradient": "radial-gradient(circle at 30% 20%, rgba(134,96,135,0.35), transparent 55%), radial-gradient(circle at 70% 10%, rgba(102,195,177,0.35), transparent 50%), linear-gradient(135deg, #0f172a, #1e293b)",

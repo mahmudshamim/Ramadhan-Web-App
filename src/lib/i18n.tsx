@@ -39,6 +39,7 @@ const STRINGS: Record<Lang, Record<string, string>> = {
     "prayer.todayIftar": "Today Iftar",
     "prayer.tomorrowSehri": "Tomorrow Sehri",
     "prayer.tomorrowIftar": "Tomorrow Iftar",
+    "prayer.sehriLastTime": "Stop eating by",
     "prayer.fajrStart": "Fajr start",
     "prayer.maghribTime": "Maghrib time",
 
@@ -92,6 +93,7 @@ const STRINGS: Record<Lang, Record<string, string>> = {
     "settings.manualCity": "Manual City (Fallback)",
     "settings.mazhab": "Mazhab",
     "settings.reminderOffset": "Reminder Offset (minutes)",
+    "settings.imsakOffset": "Sehri cutoff before Fajr (minutes)",
     "settings.ramadanYear": "Ramadan Calendar Year",
     "settings.ramadanMonth": "Ramadan Month (1-12)",
     "settings.language": "Language",
@@ -227,6 +229,7 @@ const STRINGS: Record<Lang, Record<string, string>> = {
     "prayer.todayIftar": "আজকের ইফতার",
     "prayer.tomorrowSehri": "আগামীকালের সেহরি",
     "prayer.tomorrowIftar": "আগামীকালের ইফতার",
+    "prayer.sehriLastTime": "খাওয়া শেষ করার সময়",
     "prayer.fajrStart": "ফজর শুরু",
     "prayer.maghribTime": "মাগরিব সময়",
 
@@ -276,6 +279,7 @@ const STRINGS: Record<Lang, Record<string, string>> = {
     "settings.manualCity": "ম্যানুয়াল সিটি (ফলব্যাক)",
     "settings.mazhab": "মাযহাব",
     "settings.reminderOffset": "রিমাইন্ডার অফসেট (মিনিট)",
+    "settings.imsakOffset": "ফজরের আগে সেহরি কাটঅফ (মিনিট)",
     "settings.ramadanYear": "রমাদান ক্যালেন্ডার বছর",
     "settings.ramadanMonth": "রমাদান মাস (১-১২)",
     "settings.language": "ভাষা",

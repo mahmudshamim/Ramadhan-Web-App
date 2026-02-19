@@ -147,7 +147,6 @@ export default function QuranPage() {
 
   // Split surahs into important and all
   const importantSurahs = surahs.filter((s) => IMPORTANT_SURAH_NUMBERS.includes(s.number));
-  const allSurahs = surahs;
 
   return (
     <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-12 px-6 py-20 pb-32">
@@ -171,7 +170,7 @@ export default function QuranPage() {
               {t("quran.ayah")}
             </span>
 
-            <h2 className="font-amiri mb-6 max-w-3xl text-3xl leading-relaxed text-white md:text-5xl md:leading-relaxed">
+            <h2 className="font-arabic mb-6 max-w-3xl text-3xl leading-relaxed text-white md:text-5xl md:leading-relaxed">
               {ayahOfDay.arabic}
             </h2>
 
@@ -367,70 +366,6 @@ export default function QuranPage() {
         </section>
       )}
 
-      {/* All Surahs */}
-      <section>
-        <h3 className="mb-6 text-xl font-semibold text-white">
-          {lang === "bn" ? "সকল সূরা (অফলাইন)" : "All Surahs"}
-        </h3>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {allSurahs.map((surah) => (
-            <div
-              key={surah.number}
-              className={`group relative overflow-hidden rounded-2xl border bg-white/5 p-5 transition-all hover:-translate-y-1 hover:border-teal-500/30 hover:shadow-xl hover:shadow-teal-500/5 ${currentAudio === surah.number && isPlaying
-                ? 'border-emerald-500/50 bg-emerald-500/10'
-                : 'border-white/10 hover:bg-white/10'
-                }`}
-            >
-              {/* Surah number badge */}
-              <div className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-xs font-bold text-slate-500 group-hover:text-teal-400 group-hover:bg-teal-500/10">
-                {surah.number}
-              </div>
-
-              <div className="flex items-center gap-4">
-                {/* Play button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleAudio(surah.number);
-                  }}
-                  className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full transition-all ${currentAudio === surah.number && isPlaying
-                    ? "bg-white text-emerald-600 shadow-lg"
-                    : "bg-white/10 text-emerald-400 hover:bg-emerald-500 hover:text-white"
-                    }`}
-                >
-                  {currentAudio === surah.number && isPlaying ? (
-                    <FiPause className="h-4 w-4" />
-                  ) : (
-                    <FiPlay className="h-4 w-4 ml-0.5" />
-                  )}
-                </button>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline gap-2">
-                    <h4 className="text-sm font-medium text-teal-100 group-hover:text-white truncate">{surah.name}</h4>
-                    <span className="font-amiri text-base text-emerald-400/80 flex-shrink-0">{surah.arabicName}</span>
-                  </div>
-                  <p className="text-xs text-slate-400 mt-0.5">{surah.englishNameTranslation}</p>
-                  <p className="text-[10px] text-slate-500">{surah.verses.length} Ayahs</p>
-                </div>
-              </div>
-
-              {/* Playing indicator */}
-              {currentAudio === surah.number && isPlaying && (
-                <div className="mt-3 flex items-center gap-2">
-                  <div className="flex gap-0.5 items-end">
-                    <div className="w-1 h-3 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: "0ms" }} />
-                    <div className="w-1 h-4 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: "150ms" }} />
-                    <div className="w-1 h-2 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: "300ms" }} />
-                    <div className="w-1 h-5 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: "75ms" }} />
-                  </div>
-                  <span className="text-xs text-emerald-400/70">{lang === "bn" ? "প্লে হচ্ছে..." : "Playing..."}</span>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
     </main>
   );
 }

@@ -7,16 +7,20 @@ export type AppSettings = {
   lon?: number;
   school: 0 | 1;
   reminderOffsetMin: number;
+  imsakOffsetMin: number;
   ramadanYear?: number;
   ramadanMonth?: number;
+  jamaatTimes?: Partial<Record<"fajr" | "dhuhr" | "asr" | "maghrib" | "isha", string>>;
 };
 
 const SETTINGS_KEY = "rramadhan_settings_v1";
 
 export const defaultSettings: AppSettings = {
   useGPS: true,
-  school: 0,
-  reminderOffsetMin: 10
+  school: 1,
+  reminderOffsetMin: 10,
+  imsakOffsetMin: 19,
+  jamaatTimes: {}
 };
 
 export function loadSettings(): AppSettings {

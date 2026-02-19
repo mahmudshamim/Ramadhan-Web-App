@@ -37,6 +37,7 @@ export default function DashboardPage() {
   const { t, lang } = useLang();
   const [today, setToday] = useState<DailyTracker | null>(null);
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimes | null>(null);
+  const [jamaatTimes, setJamaatTimes] = useState<Partial<Record<PrayerName, string>>>({});
   const [hadith, setHadith] = useState<HadithData | null>(null);
   const [hijriDate, setHijriDate] = useState<string>("");
   const [now, setNow] = useState(() => new Date());
@@ -62,6 +63,7 @@ export default function DashboardPage() {
 
     // Fetch prayer times
     const settings = loadSettings();
+    setJamaatTimes((settings.jamaatTimes as Partial<Record<PrayerName, string>>) ?? {});
     const lat = settings.lat ?? 23.8103;
     const lon = settings.lon ?? 90.4125;
     fetchPrayerTimes(lat, lon, new Date(), settings.school)
@@ -131,8 +133,15 @@ export default function DashboardPage() {
   ];
 
   // Determine next prayer and countdown
-  const { nextPrayer, countdown, sortedPrayers } = useMemo(() => {
-    if (!prayerTimes) return { nextPrayer: null, countdown: null, sortedPrayers: prayers };
+  const { nextPrayer, countdown, countdownMode, sortedPrayers } = useMemo(() => {
+    if (!prayerTimes) {
+      return {
+        nextPrayer: null,
+        countdown: null,
+        countdownMode: "waqt" as "waqt" | "jamaat",
+        sortedPrayers: prayers
+      };
+    }
 
     const todayDate = new Date();
     const prayerEntries = prayers
@@ -147,8 +156,20 @@ export default function DashboardPage() {
     const next = upcoming.length > 0 ? upcoming[0] : null;
 
     let countdownStr: string | null = null;
+    let mode: "waqt" | "jamaat" = "waqt";
     if (next) {
-      const totalSec = Math.max(0, Math.floor(next.remaining / 1000));
+      let remainingMs = next.remaining;
+      const jamaat = jamaatTimes[next.name];
+      if (jamaat) {
+        const jamaatDateTime = toLocalDateTime(todayDate, jamaat);
+        const jamaatRemaining = jamaatDateTime.getTime() - now.getTime();
+        if (jamaatRemaining > 0) {
+          remainingMs = jamaatRemaining;
+          mode = "jamaat";
+        }
+      }
+
+      const totalSec = Math.max(0, Math.floor(remainingMs / 1000));
       const h = Math.floor(totalSec / 3600);
       const m = Math.floor((totalSec % 3600) / 60);
       const s = totalSec % 60;
@@ -167,9 +188,9 @@ export default function DashboardPage() {
       return aTime - bTime;
     });
 
-    return { nextPrayer: next, countdown: countdownStr, sortedPrayers: sorted };
+    return { nextPrayer: next, countdown: countdownStr, countdownMode: mode, sortedPrayers: sorted };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prayerTimes, now, lang]);
+  }, [prayerTimes, now, lang, jamaatTimes]);
 
   const quickLinks = [
     { href: "/quran", icon: FiBook, label: lang === "bn" ? "কুরআন" : "Quran" },
@@ -216,15 +237,26 @@ export default function DashboardPage() {
                 </p>
                 <h2 className="font-display text-3xl sm:text-4xl text-white">{nextPrayer.label}</h2>
                 <p className="text-sm text-slate-400 mt-0.5">
-                  {lang === "bn" ? "শুরু" : "Starts at"} {formatTo12Hour(nextPrayer.time!, lang)}
+                  {lang === "bn" ? "ওয়াক্ত শুরু" : "Waqt starts at"} {formatTo12Hour(nextPrayer.time!, lang)}
                 </p>
+                {jamaatTimes[nextPrayer.name] ? (
+                  <p className="text-sm text-brand-sand mt-1">
+                    {lang === "bn" ? "জামাত" : "Jamaat"} {formatTo12Hour(jamaatTimes[nextPrayer.name]!, lang)}
+                  </p>
+                ) : null}
               </div>
             </div>
 
             {/* Countdown */}
             <div className="flex flex-col items-center sm:items-end">
               <p className="text-xs uppercase tracking-[0.3em] text-brand-sand/70 mb-2">
-                {lang === "bn" ? "বাকি সময়" : "Starts in"}
+                {lang === "bn"
+                  ? countdownMode === "jamaat"
+                    ? "জামাত বাকি"
+                    : "ওয়াক্ত বাকি"
+                  : countdownMode === "jamaat"
+                    ? "Jamaat starts in"
+                    : "Waqt starts in"}
               </p>
               <div className="flex items-center gap-1 font-display text-4xl sm:text-5xl text-white tabular-nums">
                 {countdown?.split(":").map((part, i) => (
@@ -341,11 +373,18 @@ export default function DashboardPage() {
                           {countdown}
                         </span>
                       )}
-                      {prayer.time && (
-                        <span className={`text-sm ${isNext ? "text-brand-gold font-semibold" : "text-slate-400"}`}>
-                          {formatTo12Hour(prayer.time, lang)}
-                        </span>
-                      )}
+                      <div className="text-right">
+                        {prayer.time && (
+                          <span className={`block text-sm ${isNext ? "text-brand-gold font-semibold" : "text-slate-400"}`}>
+                            {formatTo12Hour(prayer.time, lang)}
+                          </span>
+                        )}
+                        {jamaatTimes[prayer.name] ? (
+                          <span className="block text-[11px] text-slate-500">
+                            {lang === "bn" ? "জামাত" : "Jamaat"} {formatTo12Hour(jamaatTimes[prayer.name]!, lang)}
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
                   </button>
                 );

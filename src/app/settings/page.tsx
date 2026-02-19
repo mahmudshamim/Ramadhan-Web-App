@@ -9,6 +9,7 @@ export default function SettingsPage() {
   const { lang, setLang, t } = useLang();
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
   const [statusKey, setStatusKey] = useState<string>("");
+  const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
     setSettings(loadSettings());
@@ -17,7 +18,25 @@ export default function SettingsPage() {
   const update = (patch: Partial<AppSettings>) => {
     const next = { ...settings, ...patch };
     setSettings(next);
-    saveSettings(next);
+    setDirty(true);
+  };
+
+  const updateJamaat = (prayer: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha", value: string) => {
+    const next = {
+      ...settings,
+      jamaatTimes: {
+        ...(settings.jamaatTimes ?? {}),
+        [prayer]: value
+      }
+    };
+    setSettings(next);
+    setDirty(true);
+  };
+
+  const handleSave = () => {
+    saveSettings(settings);
+    setDirty(false);
+    setStatusKey("settings.status.saved");
   };
 
   const handleGPS = () => {
@@ -105,7 +124,7 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 md:grid-cols-2">
+      <section className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 md:grid-cols-3">
         <div className="flex flex-col gap-2">
           <label className="text-sm text-slate-300">{t("settings.mazhab")}</label>
           <select
@@ -128,6 +147,17 @@ export default function SettingsPage() {
             className="rounded-xl border border-white/10 bg-brand-night px-4 py-3 text-slate-200"
           />
         </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm text-slate-300">{t("settings.imsakOffset")}</label>
+          <input
+            type="number"
+            min={0}
+            max={60}
+            value={settings.imsakOffsetMin}
+            onChange={(e) => update({ imsakOffsetMin: Number(e.target.value) })}
+            className="rounded-xl border border-white/10 bg-brand-night px-4 py-3 text-slate-200"
+          />
+        </div>
       </section>
 
       <section className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 md:grid-cols-2">
@@ -135,7 +165,10 @@ export default function SettingsPage() {
           <label className="text-sm text-slate-300">{t("settings.language")}</label>
           <select
             value={lang}
-            onChange={(e) => setLang(e.target.value as "en" | "bn")}
+            onChange={(e) => {
+              setLang(e.target.value as "en" | "bn");
+              setDirty(true);
+            }}
             className="rounded-xl border border-white/10 bg-brand-night px-4 py-3 text-slate-200"
           >
             <option value="en">English</option>
@@ -171,6 +204,47 @@ export default function SettingsPage() {
           />
         </div>
       </section>
+
+      <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <h2 className="mb-4 text-sm uppercase tracking-[0.2em] text-brand-sand">
+          {lang === "bn" ? "জামাত সময় (ঐচ্ছিক)" : "Jamaat Times (Optional)"}
+        </h2>
+        <div className="grid gap-4 md:grid-cols-5">
+          {([
+            ["fajr", lang === "bn" ? "ফজর" : "Fajr"],
+            ["dhuhr", lang === "bn" ? "যুহর" : "Dhuhr"],
+            ["asr", lang === "bn" ? "আসর" : "Asr"],
+            ["maghrib", lang === "bn" ? "মাগরিব" : "Maghrib"],
+            ["isha", lang === "bn" ? "ইশা" : "Isha"]
+          ] as const).map(([key, label]) => (
+            <label key={key} className="flex flex-col gap-2 text-sm text-slate-300">
+              {label}
+              <input
+                type="time"
+                value={settings.jamaatTimes?.[key] ?? ""}
+                onChange={(e) => updateJamaat(key, e.target.value)}
+                className="rounded-xl border border-white/10 bg-brand-night px-3 py-2 text-slate-200"
+              />
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={handleSave}
+          className="btn-gold rounded-full px-6 py-2 text-xs uppercase tracking-[0.2em] disabled:opacity-40"
+          disabled={!dirty}
+        >
+          {lang === "bn" ? "সেটিংস সেভ করুন" : "Save Settings"}
+        </button>
+        {dirty ? (
+          <span className="text-xs uppercase tracking-[0.2em] text-brand-sand">
+            {lang === "bn" ? "আনসেভড পরিবর্তন আছে" : "Unsaved changes"}
+          </span>
+        ) : null}
+      </div>
 
       {statusKey ? <p className="text-sm text-brand-gold">{t(statusKey)}</p> : null}
     </main>

@@ -6,7 +6,7 @@ import PrayerTimeCard from "./PrayerTimeCard";
 import CountdownTimer from "./CountdownTimer";
 import Badge from "./Badge";
 import { FiMoon, FiSunrise } from "react-icons/fi";
-import { fetchPrayerTimes, toLocalDateTime, formatTo12Hour, type PrayerTimes } from "../lib/prayerTime";
+import { fetchPrayerTimes, toLocalDateTime, formatTo12Hour, shiftTime, type PrayerTimes } from "../lib/prayerTime";
 import { scheduleIftarReminder, cancelReminder, getReminderStatus, restoreReminder } from "../lib/notifications";
 import { loadJSON, saveJSON } from "../lib/storage";
 import { AppSettings, defaultSettings, loadSettings, saveSettings } from "../lib/settings";
@@ -53,6 +53,7 @@ export default function HomeClient() {
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [school, setSchool] = useState<0 | 1>(0);
   const [reminderOffset, setReminderOffset] = useState<number>(10);
+  const [imsakOffset, setImsakOffset] = useState<number>(10);
   const [reminderMinutes, setReminderMinutes] = useState<number>(15); // Custom reminder time
   const [useGPS, setUseGPS] = useState<boolean>(true);
   const [manualCoords, setManualCoords] = useState<{ lat: number; lon: number } | null>(null);
@@ -77,6 +78,7 @@ export default function HomeClient() {
     const settings = loadSettings();
     setSchool(settings.school ?? defaultSettings.school);
     setReminderOffset(settings.reminderOffsetMin ?? defaultSettings.reminderOffsetMin);
+    setImsakOffset(settings.imsakOffsetMin ?? defaultSettings.imsakOffsetMin);
     setUseGPS(settings.useGPS ?? defaultSettings.useGPS);
 
     if (settings.lat && settings.lon) {
@@ -108,21 +110,49 @@ export default function HomeClient() {
     }
 
     if (!navigator.geolocation) {
+      if (manualCoords) {
+        setStatusKey("status.usingCity");
+        setCoords({ lat: manualCoords.lat, lon: manualCoords.lon });
+        fetchWithCoords(manualCoords.lat, manualCoords.lon);
+        return;
+      }
       setStatusKey("status.locationUnavailable");
+      fetchWithCoords(23.8103, 90.4125);
       return;
     }
 
-    // Check if permission is already granted
-    navigator.permissions.query({ name: "geolocation" }).then((result) => {
-      if (result.state === "granted") {
-        requestLocation();
-      } else if (result.state === "prompt") {
-        setPermissionType("location");
-        setShowPermissionModal(true);
-      } else {
-        setStatusKey("status.permissionDenied");
+    const fallbackToManualOrDefault = () => {
+      if (manualCoords) {
+        setStatusKey("status.usingCity");
+        setCoords({ lat: manualCoords.lat, lon: manualCoords.lon });
+        fetchWithCoords(manualCoords.lat, manualCoords.lon);
+        return;
       }
-    });
+      setStatusKey("status.locationUnavailable");
+      fetchWithCoords(23.8103, 90.4125);
+    };
+
+    // Permissions API is not consistently available across browsers.
+    if (navigator.permissions?.query) {
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then((result) => {
+          if (result.state === "granted") {
+            requestLocation();
+          } else if (result.state === "prompt") {
+            setPermissionType("location");
+            setShowPermissionModal(true);
+          } else {
+            setStatusKey("status.permissionDenied");
+            fallbackToManualOrDefault();
+          }
+        })
+        .catch(() => {
+          requestLocation();
+        });
+    } else {
+      requestLocation();
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [school, useGPS, manualCoords, mounted]);
@@ -176,6 +206,18 @@ export default function HomeClient() {
       },
       () => {
         setStatusKey("status.permissionDenied");
+        if (manualCoords) {
+          setStatusKey("status.usingCity");
+          setCoords({ lat: manualCoords.lat, lon: manualCoords.lon });
+          fetchWithCoords(manualCoords.lat, manualCoords.lon);
+          return;
+        }
+        fetchWithCoords(23.8103, 90.4125);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000
       }
     );
   };
@@ -257,8 +299,8 @@ export default function HomeClient() {
     const now = new Date();
     const today = new Date();
 
-    // 1. Check if it's before Today's Sehri (Fajr)
-    const todaySehri = toLocalDateTime(today, todayTimes.Fajr);
+    // 1. Check if it's before today's Sehri last time (Imsak)
+    const todaySehri = toLocalDateTime(today, shiftTime(todayTimes.Fajr, -imsakOffset));
     if (now.getTime() < todaySehri.getTime()) {
       return {
         countdownTarget: todaySehri.toISOString(),
@@ -278,12 +320,12 @@ export default function HomeClient() {
     // 3. Otherwise, it's after Iftar, target is Tomorrow's Sehri
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
-    const tomorrowSehri = toLocalDateTime(tomorrow, tomorrowTimes.Fajr);
+    const tomorrowSehri = toLocalDateTime(tomorrow, shiftTime(tomorrowTimes.Fajr, -imsakOffset));
     return {
       countdownTarget: tomorrowSehri.toISOString(),
       countdownLabelKey: "countdown.nextSehri"
     };
-  }, [todayTimes, tomorrowTimes]);
+  }, [todayTimes, tomorrowTimes, imsakOffset]);
 
   const handleReminder = async () => {
     if (reminderSet) {
@@ -366,8 +408,9 @@ export default function HomeClient() {
           <div className="grid gap-6 sm:grid-cols-2">
             <PrayerTimeCard
               label={t("prayer.todaySehri")}
-              time={todayTimes.Fajr}
-              subtitle={t("prayer.fajrStart")}
+              time={shiftTime(todayTimes.Fajr, -imsakOffset)}
+              subtitle={t("prayer.sehriLastTime")}
+              lang={lang}
             />
             <PrayerTimeCard
               label={t("prayer.todayIftar")}
@@ -377,8 +420,8 @@ export default function HomeClient() {
             />
             <PrayerTimeCard
               label={t("prayer.tomorrowSehri")}
-              time={tomorrowTimes.Fajr}
-              subtitle={t("prayer.fajrStart")}
+              time={shiftTime(tomorrowTimes.Fajr, -imsakOffset)}
+              subtitle={t("prayer.sehriLastTime")}
               lang={lang}
             />
             <PrayerTimeCard
@@ -551,26 +594,37 @@ export default function HomeClient() {
                             </div>
 
                             {/* Prayer Times Section */}
-                            <div className="mt-8 lg:mt-0 flex flex-row items-center justify-between sm:justify-around lg:justify-end gap-4 sm:gap-12 lg:gap-20 px-2 sm:px-6 lg:px-10 border-t lg:border-t-0 lg:border-l border-brand-gold/10 pt-6 lg:pt-0 w-full lg:w-auto">
-                              <div className="flex flex-col items-center lg:items-end gap-1">
-                                <div className="flex items-center gap-2 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-sand/70 font-bold mb-1">
-                                  <FiSunrise className="text-brand-gold text-xs" />
-                                  {t("ramadan.col.sehri")}
+                            <div className="mt-8 lg:mt-0 w-full border-t border-brand-gold/10 pt-6 lg:w-auto lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0">
+                              <div className="flex flex-row items-center justify-between sm:justify-around lg:justify-end gap-4 sm:gap-8 lg:gap-12 px-2 sm:px-6 lg:px-8">
+                                <div className="flex flex-col items-center lg:items-end gap-1">
+                                  <div className="flex items-center gap-2 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-sand/70 font-bold mb-1">
+                                    <FiSunrise className="text-brand-gold text-xs" />
+                                    {t("ramadan.col.sehri")}
+                                  </div>
+                                  <span className="text-xl sm:text-2xl font-black text-white leading-none">
+                                    {formatTo12Hour(shiftTime(day.fajr, -imsakOffset), lang)}
+                                  </span>
                                 </div>
-                                <span className="text-xl sm:text-2xl font-black text-white leading-none">
-                                  {formatTo12Hour(day.fajr, lang)}
-                                </span>
+
+                                <div className="h-10 w-px bg-brand-gold/10" />
+
+                                <div className="flex flex-col items-center lg:items-start gap-1">
+                                  <div className="flex items-center gap-2 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-sand/70 font-bold mb-1">
+                                    <FiMoon className="text-brand-gold text-xs" />
+                                    {t("ramadan.col.iftar")}
+                                  </div>
+                                  <span className="text-xl sm:text-2xl font-black text-white leading-none">
+                                    {formatTo12Hour(day.maghrib, lang)}
+                                  </span>
+                                </div>
                               </div>
-
-                              <div className="h-10 w-px bg-brand-gold/10" />
-
-                              <div className="flex flex-col items-center lg:items-start gap-1">
-                                <div className="flex items-center gap-2 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-sand/70 font-bold mb-1">
-                                  <FiMoon className="text-brand-gold text-xs" />
-                                  {t("ramadan.col.iftar")}
-                                </div>
-                                <span className="text-xl sm:text-2xl font-black text-white leading-none">
-                                  {formatTo12Hour(day.maghrib, lang)}
+                              <div className="mt-3 flex items-center justify-center gap-2 rounded-full border border-brand-gold/20 bg-brand-gold/5 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-brand-sand/85">
+                                <span className="flex items-center gap-2 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-sand/70 font-bold">
+                                  <FiSunrise className="text-brand-gold text-xs" />
+                                  {t("prayer.fajrStart")}
+                                </span>
+                                <span className="font-semibold normal-case tracking-normal text-white">
+                                  {formatTo12Hour(day.fajr, lang)}
                                 </span>
                               </div>
                             </div>

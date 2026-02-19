@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Space_Grotesk } from "next/font/google";
+import { Noto_Naskh_Arabic, Playfair_Display, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import NavBar from "../components/NavBar";
 import ServiceWorker from "../components/ServiceWorker";
@@ -15,6 +15,11 @@ const display = Playfair_Display({
 const sans = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans"
+});
+
+const arabic = Noto_Naskh_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-arabic"
 });
 
 export const metadata: Metadata = {
@@ -75,7 +80,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
+    <html lang="en" className={`${display.variable} ${sans.variable} ${arabic.variable}`}>
       <head>
         <meta name="google-site-verification" content="b-jJc-example-verification-code" />
         <script

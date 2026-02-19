@@ -46,7 +46,7 @@ export default function DuasPage() {
               className="rounded-3xl border border-white/10 bg-white/5 p-6"
             >
               <h2 className="text-xl text-brand-light">{dua.title[lang]}</h2>
-              <p className="mt-4 text-2xl text-slate-100">{dua.arabic}</p>
+              <p className="mt-4 font-arabic text-3xl leading-relaxed text-slate-100">{dua.arabic}</p>
               <p className="mt-3 text-sm text-slate-300">{dua.transliteration[lang]}</p>
               <p className="mt-2 text-base text-slate-200">{dua.translation[lang]}</p>
             </section>
